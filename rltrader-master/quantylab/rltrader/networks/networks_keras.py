@@ -2,7 +2,6 @@ import os
 import threading
 import numpy as np
 
-
 if os.environ.get('KERAS_BACKEND', 'tensorflow') == 'tensorflow':
     from tensorflow.keras.models import Model
     from tensorflow.keras.layers import Input, Dense, LSTM, Conv1D, \

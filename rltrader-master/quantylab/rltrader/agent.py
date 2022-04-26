@@ -1,5 +1,5 @@
 import numpy as np
-from quantylab.rltrader import utils
+import utils
 
 
 class Agent:
