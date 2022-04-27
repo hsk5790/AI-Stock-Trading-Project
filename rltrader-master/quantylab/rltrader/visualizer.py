@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 
 from mplfinance.original_flavor import candlestick_ohlc
-from agent import Agent
+from quantylab.rltrader.agent import Agent
 
 
 lock = threading.Lock()

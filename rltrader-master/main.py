@@ -4,19 +4,24 @@ import logging
 import argparse
 import json
 
-os.environ['RLTRADER_BASE'] = 'D:\\dev\\rltrader'
+# 각자 본인의 local 환경에 맞게 설정
+os.environ['RLTRADER_BASE'] = 'C:\\big14\\BKST\\rltrader-master'
 from quantylab.rltrader import settings
 from quantylab.rltrader import utils
 from quantylab.rltrader import data_manager
 
+# 아나콘다 프롬프트에서 conda activate bkst 하고 main.py 가 있는 폴더까지 이동해서 실행
+# ex) "C:\big14\BKST\rltrader-master
+# Anaconda prompt에서 실행하는 방법 : python main.py --stock_code 005930
+# 값들을 바꾸고 싶으면 추가해서 사용하면 된다. 책 239pg 참고
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', choices=['train', 'test', 'update', 'predict'], default='train')
-    parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v2')
+    parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')
     parser.add_argument('--name', default=utils.get_time_str())
-    parser.add_argument('--stock_code', nargs='+')
-    parser.add_argument('--rl_method', choices=['dqn', 'pg', 'ac', 'a2c', 'a3c', 'monkey'])
+    parser.add_argument('--stock_code', nargs='+', default=["005930"])
+    parser.add_argument('--rl_method', choices=['dqn', 'pg', 'ac', 'a2c', 'a3c', 'monkey'], default='dqn')
     parser.add_argument('--net', choices=['dnn', 'lstm', 'cnn', 'monkey'], default='dnn')
     parser.add_argument('--backend', choices=['pytorch', 'tensorflow', 'plaidml'], default='pytorch')
     parser.add_argument('--start_date', default='20200101')
@@ -85,7 +90,10 @@ if __name__ == '__main__':
     list_min_trading_price = []
     list_max_trading_price = []
 
+    print('main: ', args)
+    # args.stock_code의 class는 'str'
     for stock_code in args.stock_code:
+        print('stock_code: ', stock_code)
         # 차트 데이터, 학습 데이터 준비
         chart_data, training_data = data_manager.load_data(
             stock_code, args.start_date, args.end_date, ver=args.ver)
