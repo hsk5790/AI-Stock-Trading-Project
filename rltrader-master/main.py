@@ -18,12 +18,26 @@ from quantylab.rltrader import data_manager
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', choices=['train', 'test', 'update', 'predict'], default='train')
+<<<<<<< HEAD
+<<<<<<< HEAD
     parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')                            # RLTrader의 버전
     parser.add_argument('--name', default=utils.get_time_str())
     parser.add_argument('--stock_code', nargs='+', default=["005930"])                                      # 강화학습의 환경이 될 주식 종목 코드
     parser.add_argument('--rl_method', choices=['dqn', 'pg', 'ac', 'a2c', 'a3c', 'monkey'], default='dqn')  # 강화학습 방식
     parser.add_argument('--net', choices=['dnn', 'lstm', 'cnn', 'monkey'], default='dnn')                   # 가치 신경망과 정책 신경망 중 사용할 신경망 유형 선택
     parser.add_argument('--backend', choices=['pytorch', 'tensorflow', 'plaidml'], default='pytorch')       # 백엔드로 사용할 Framework 설정
+=======
+    parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')
+    parser.add_argument('--name', default=utils.get_time_str())
+=======
+    parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')
+    parser.add_argument('--name', default=utils.get_time_str())
+>>>>>>> origin/Master
+    parser.add_argument('--stock_code', nargs='+', default=["005930"])
+    parser.add_argument('--rl_method', choices=['dqn', 'pg', 'ac', 'a2c', 'a3c', 'monkey'], default='dqn')
+    parser.add_argument('--net', choices=['dnn', 'lstm', 'cnn', 'monkey'], default='dnn')
+    parser.add_argument('--backend', choices=['pytorch', 'tensorflow', 'plaidml'], default='pytorch')
+>>>>>>> d1494d2 (아나콘다 프롬프트에서 실행했을 때 바로 작동할 수 있도록 코드 수정해 놨습니다. conda activate bkst 해서 bkst 가상환경에서 실행해주세요.)
     parser.add_argument('--start_date', default='20200101')
     parser.add_argument('--end_date', default='20201231')
     parser.add_argument('--lr', type=float, default=0.0001)

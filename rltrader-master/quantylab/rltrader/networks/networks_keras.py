@@ -2,7 +2,14 @@ import os
 import threading
 import numpy as np
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 # 얘는 main에 설정돼있다.
+=======
+>>>>>>> 1034ff0 (rltrader 코드 바로 사용할 수 있도록 수정했습니다.)
+=======
+
+>>>>>>> d1494d2 (아나콘다 프롬프트에서 실행했을 때 바로 작동할 수 있도록 코드 수정해 놨습니다. conda activate bkst 해서 bkst 가상환경에서 실행해주세요.)
 if os.environ.get('KERAS_BACKEND', 'tensorflow') == 'tensorflow':
     from tensorflow.keras.models import Model
     from tensorflow.keras.layers import Input, Dense, LSTM, Conv1D, \
