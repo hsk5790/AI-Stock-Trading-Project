@@ -20,6 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--mode', choices=['train', 'test', 'update', 'predict'], default='train')
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')                            # RLTrader의 버전
     parser.add_argument('--name', default=utils.get_time_str())
     parser.add_argument('--stock_code', nargs='+', default=["005930"])                                      # 강화학습의 환경이 될 주식 종목 코드
@@ -29,6 +30,10 @@ if __name__ == '__main__':
 =======
     parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')
     parser.add_argument('--name', default=utils.get_time_str())
+=======
+    parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')
+    parser.add_argument('--name', default=utils.get_time_str())
+>>>>>>> origin/Master
 =======
     parser.add_argument('--ver', choices=['v1', 'v2', 'v3', 'v4'], default='v3')
     parser.add_argument('--name', default=utils.get_time_str())
