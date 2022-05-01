@@ -236,6 +236,11 @@ def load_data_v3_v4(code, date_from, date_to, ver):
                 thousands=',', header=0, converters={'date': lambda x: str(x)})
             break
 
+    # print('data_manager: df_stockf ', df_stockfeatures)
+    # print('data_manager: df_stockf ',type(df_stockfeatures))
+    # print('data_manager: df_marketf ',df_marketfeatures)
+    # print('data_manager: df_marketf ', type(df_marketfeatures))
+
     # 시장 데이터와 종목 데이터 합치기
     df = pd.merge(df_stockfeatures, df_marketfeatures, on='date', how='left', suffixes=('', '_dup'))
     df = df.drop(df.filter(regex='_dup$').columns.tolist(), axis=1)
