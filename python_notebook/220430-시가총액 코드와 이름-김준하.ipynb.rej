@@ -1,0 +1,9 @@
+diff a/python_notebook/220430-시가총액 코드와 이름-김준하.ipynb b/python_notebook/220430-시가총액 코드와 이름-김준하.ipynb	(rejected hunks)
+@@ -3505,7 +3505,6 @@
+   },
+   {
+    "cell_type": "code",
+-   "id": "925b390d",
+    "execution_count": null,
+    "id": "91c70389",
+    "metadata": {},

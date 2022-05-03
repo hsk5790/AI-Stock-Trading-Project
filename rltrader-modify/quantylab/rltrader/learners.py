@@ -13,6 +13,7 @@ from quantylab.rltrader.networks import Network, DNN, LSTMNetwork, CNN
 from quantylab.rltrader.visualizer import Visualizer
 from quantylab.rltrader import utils
 from quantylab.rltrader import settings
+from quantylab.rltrader import db_connection
 
 
 logger = logging.getLogger(settings.LOGGER_NAME)
@@ -98,6 +99,8 @@ class ReinforcementLearner:
         # 로그 등 출력 경로
         self.output_path = output_path  # 로그, 가시화, 학습 모델 등은 output_path로 지정된 경로 하위에 저장된다.
 
+
+
     # init_value_network() : net에 지정된 신경망 종류에 맞게 가치 신경망을 생성한다.
     # 가치 신경망은 손익률을 회귀분석하는 모델. 그래서 af은 linear로, 손실 함수는 MSE로 설정
     def init_value_network(self, shared_network=None, activation='linear', loss='mse'):
@@ -178,7 +181,7 @@ class ReinforcementLearner:
         # 에포크 관련 정보 초기화
         self.loss = 0.              # 신경망의 결과가 학습 데이터와 얼마나 차이가 있는지를 저장하는 변수다.(줄어들면 좋다)
         self.itr_cnt = 0            # 수행한 epoch 수 저장
-        self.exploration_cnt = 0    # 무작위 투자를 수행한 횟수 저장(epsilon이 0.1이고 100번의 투자 결정이 있아면 약 10번의 무작위 투자를 한 것이다.)
+        self.exploration_cnt = 0    # 무작위 투자를 수행한 횟수 저장(epsilon이 0.1이고 100번의 투자 결정이 있다면 약 10번의 무작위 투자를 한 것이다.)
         self.batch_size = 0
 
     # build_sample() : environment object에서 샘플을 획득하는 함수
@@ -192,7 +195,7 @@ class ReinforcementLearner:
             return self.sample
         return None
 
-    # get_batch() : 신경망을 학습히가 위해 배치 학습 데이터를 생성하는 함수
+    # get_batch() : 신경망을 학습하기 위해 배치 학습 데이터를 생성하는 함수
     # get_batch() 함수는 추상 메소드로서 ReinforcementLearner 클래스의 하위 클래스들은 반드시 이 함수를 구현해야 한다.
     # ReinforcementLearner 클래스를 상속하고도 이 추상 메소드를 구현하지 implement하지 않으면 NotImplemented 예외가 발생한다.
     @abc.abstractmethod
@@ -291,6 +294,7 @@ class ReinforcementLearner:
             else:
                 epsilon = self.start_epsilon
 
+
             # tqdm의 leave parameter는 상태만 표시
             for i in tqdm(range(len(self.training_data)), leave=False):
                 # build_sample() 함수를 호출해 환경 객체로부터 하나의 샘플을 읽어온다.
@@ -357,12 +361,24 @@ class ReinforcementLearner:
             epoch_str = str(epoch + 1).rjust(num_epoches_digit, '0')    # str().rjust() : 원하는 문자를 앞에 채워준다. 180pg 참고
             time_end_epoch = time.time()                                            # 현재 시간
             elapsed_time_epoch = time_end_epoch - time_start_epoch                  # epoch 수행 소요 시간
+
             logger.debug(f'[{self.stock_code}][Epoch {epoch_str}/{self.num_epoches}] '  
                 f'Epsilon:{epsilon:.4f} #Expl.:{self.exploration_cnt}/{self.itr_cnt} '
                 f'#Buy:{self.agent.num_buy} #Sell:{self.agent.num_sell} #Hold:{self.agent.num_hold} '
                 f'#Stocks:{self.agent.num_stocks} PV:{self.agent.portfolio_value:,.0f} '
                 f'Loss:{self.loss:.6f} ET:{elapsed_time_epoch:.4f}')    # loss 변수는 epoch동안 수행한 미니 배치들의 학습 손실을 모두 더해놓은 상태다.
                                                                         # loss를 학습 횟수만큼 나눠서 미니 배치의 평균 학습 손실로 갱신한다.
+
+            # 에포크 관련 정보 로그 DB에 저장
+            info_relate_epoch = {'stock_code': f'{self.stock_code}', 'epoch': f'{epoch_str}/{self.num_epoches}' \
+                                     , 'epsilon': f'{epsilon:.4f}', 'expl': f'{self.exploration_cnt}/{self.itr_cnt}' \
+                                     , 'buy': f'{self.agent.num_buy}', 'sell': f'{self.agent.num_sell}'
+                                     , 'hold': f'{self.agent.num_hold}' \
+                                     , 'stocks': f'{self.agent.num_stocks}', 'PV': f'{self.agent.portfolio_value:,.0f}' \
+                                     , 'loss': f'{self.loss:.6f}', 'ET': f'{elapsed_time_epoch:.4f}'}
+
+            db_connection.insert(info_relate_epoch)
+
 
             # visualize() 함수를 이용해 하나의 에포크 관련 정보 가시화
             if self.num_epoches == 1 or (epoch + 1) % int(self.num_epoches / 10) == 0:

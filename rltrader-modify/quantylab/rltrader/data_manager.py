@@ -38,7 +38,7 @@ COLUMNS_TRAINING_DATA_V3 = COLUMNS_TRAINING_DATA_V2 + [
     'inst', 'inst_diff', 'inst_ma5', 'inst_ma10', 'inst_ma20', 'inst_ma60', 'inst_ma120',
     'foreign', 'foreign_diff', 'foreign_ma5', 'foreign_ma10', 'foreign_ma20', 
     'foreign_ma60', 'foreign_ma120',
-]
+] + []
 COLUMNS_TRAINING_DATA_V3 = list(map(
     lambda x: x if x != 'close_lastclose_ratio' else 'diffratio', COLUMNS_TRAINING_DATA_V3))
 
